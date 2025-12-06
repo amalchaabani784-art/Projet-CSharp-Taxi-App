@@ -52,7 +52,7 @@ namespace Projet_C__Taxi_App.Models
         }
 
         //  display enum nicely with accents
-        private string StatutToString()
+        public string StatutToString()
         {
             return Statut switch
             {
