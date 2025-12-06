@@ -17,9 +17,12 @@ namespace Projet_C__Taxi_App.Models
         public Chauffeur Chauffeur { get; set; }
         public Client Client { get; set; }
 
+        //  Use enum for course status
+        public StatutCourse Statut { get; set; } = StatutCourse.Reservee;
+
         public Course() { }
 
-        public Course(int id, DateTime date, double distance, double duree, Chauffeur chauffeur, Client client)
+        public Course(int id, DateTime date, double distance, double duree, Chauffeur chauffeur, Client client, StatutCourse statut = StatutCourse.Reservee)
         {
             Id = id;
             DateCourse = date;
@@ -27,6 +30,7 @@ namespace Projet_C__Taxi_App.Models
             DureeMinutes = duree;
             Chauffeur = chauffeur;
             Client = client;
+            Statut = statut;
             Prix = CalculerPrix();
         }
 
@@ -41,9 +45,27 @@ namespace Projet_C__Taxi_App.Models
             return Chauffeur != null && Chauffeur.Disponible;
         }
 
+        //  method to track the course
+        public string SuiviCourse()
+        {
+            return $"Course {Id} : {StatutToString()} - Chauffeur: {Chauffeur.Nom} - Client: {Client.Nom}";
+        }
+
+        //  display enum nicely with accents
+        private string StatutToString()
+        {
+            return Statut switch
+            {
+                StatutCourse.Reservee => "Réservée",
+                StatutCourse.EnCours => "En cours",
+                StatutCourse.Terminee => "Terminée",
+                _ => "Inconnu"
+            };
+        }
+
         public override string ToString()
         {
-            return $"{DateCourse}: {Client.Nom} avec {Chauffeur.Nom} - Prix: {Prix}€";
+            return $"{DateCourse}: {Client.Nom} avec {Chauffeur.Nom} - Prix: {Prix}€ - Statut: {StatutToString()}";
         }
     }
 }
